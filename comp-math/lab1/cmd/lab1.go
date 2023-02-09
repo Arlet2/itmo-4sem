@@ -23,9 +23,10 @@ func main() {
 		return
 	}
 
-	eps, matrix, isErr := reader.Read()
+	eps, matrix, err := reader.Read()
 
-	if isErr{
+	if err != nil{
+		fmt.Println("Ошибка: "+err.Error())
 		return
 	}
 

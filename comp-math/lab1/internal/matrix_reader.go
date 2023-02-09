@@ -1,21 +1,23 @@
 package internal
+
 import (
-	"strconv"
-	"strings"
 	"bufio"
+	"errors"
 	"fmt"
 	"io"
 	"os"
+	"strconv"
+	"strings"
 )
 
 type MatrixReader interface {
-	Read() (float64, matrix, bool)
+	Read() (float64, matrix, error)
 }
 
 type ConsoleReader struct {}
 type FileReader struct {}
 
-func (ConsoleReader) Read() (float64, matrix, bool) {
+func (ConsoleReader) Read() (float64, matrix, error) {
 	var input string
 
 	fmt.Print("Введите размер матрицы: ")
@@ -23,17 +25,17 @@ func (ConsoleReader) Read() (float64, matrix, bool) {
 	fmt.Scanf(" ") // сброс пробела....
 
 	if err != nil {
-		panic("Нужно что-то ввести")
+		return 0, matrix{}, errors.New("нужно что-то ввести")
 	}
 
 	inputSize, err := strconv.ParseInt(input, 10, 8)
 
 	if err != nil {
-		panic("Размер матрицы - целое число")
+		return 0, matrix{}, errors.New("размер матрицы - целое число")
 	}
 
 	if inputSize <= 0 {
-		panic("Размер матрицы - положительное число")
+		return 0, matrix{}, errors.New("размер матрицы - положительное число")
 	}
 
 	var size int = int(inputSize)
@@ -44,17 +46,17 @@ func (ConsoleReader) Read() (float64, matrix, bool) {
 	fmt.Scanf(" ") // сброс пробела....
 
 	if err != nil {
-		panic("Нужно что-то ввести")
+		return 0, matrix{}, errors.New("нужно что-то ввести")
 	}
 
 	eps, err := strconv.ParseFloat(input, 64)
 
 	if err != nil {
-		panic("Точность должна быть числом")
+		return 0, matrix{}, errors.New("точность должна быть числом")
 	}
 
 	if eps <= 0 {
-		panic("Точность должна быть положительным числом")
+		return 0, matrix{}, errors.New("точность должна быть положительным числом")
 	}
 
 	coeff := make([][]float64, size)
@@ -66,21 +68,21 @@ func (ConsoleReader) Read() (float64, matrix, bool) {
 			_, err = fmt.Scan(&input)
 
 			if err != nil {
-				panic("Недостаточно коэффициентов")
+				return 0, matrix{}, errors.New("недостаточно коэффициентов")
 			}
 
 			coeff[i][j], err = strconv.ParseFloat(input, 64)
 
 			if err != nil {
-				panic("Коэффициенты должны быть числами")
+				return 0, matrix{}, errors.New("коэффициенты должны быть числами")
 			}
 		}
 	}
 
-	return eps, matrix{size: size, coeff: coeff}, false
+	return eps, matrix{size: size, coeff: coeff}, nil
 }
 
-func (FileReader) Read() (float64, matrix, bool) {
+func (FileReader) Read() (float64, matrix, error) {
 	var path string
 	fmt.Print("Введите название файла: ")
 
@@ -89,7 +91,7 @@ func (FileReader) Read() (float64, matrix, bool) {
 	file, err := os.OpenFile(path, os.O_RDONLY, os.ModeIrregular)
 
 	if err != nil{
-		panic(err)
+		return 0, matrix{}, err
 	}
 	defer file.Close()
 
@@ -98,31 +100,31 @@ func (FileReader) Read() (float64, matrix, bool) {
 	line, _, err := reader.ReadLine()
 
 	if err == io.EOF {
-		panic("Файл пустой")
+		return 0, matrix{}, errors.New("файл пустой")
 	}
 
 	if err != nil {
-		panic(err)
+		return 0, matrix{}, err
 	}
 
 	size, err := strconv.Atoi(strings.Split(string(line), " ")[0])
 
 	if err != nil {
-		panic("Размер матрицы - целое число")
+		return 0, matrix{}, errors.New("размер матрицы - целое число")
 	}
 
 	if size <= 0 {
-		panic("Размер матрицы - положительное число")
+		return 0, matrix{}, errors.New("размер матрицы - положительное число")
 	}
 
 	eps, err := strconv.ParseFloat(strings.Split(string(line), " ")[1], 64)
 
 	if err != nil {
-		panic("Точность - число")
+		return 0, matrix{}, errors.New("точность - число")
 	}
 
 	if eps <= 0 {
-		panic("Точность - положительное число")
+		return 0, matrix{}, errors.New("точность - положительное число")
 	}
 
 	coeff := make([][]float64, size)
@@ -134,11 +136,11 @@ func (FileReader) Read() (float64, matrix, bool) {
 		lineCoeff := strings.Split(string(line), " ")
 
 		if err != nil{
-			panic("Недостаточно строк")
+			return 0, matrix{}, errors.New("недостаточно строк")
 		}
 
 		if len(lineCoeff) < size {
-			panic("Недостаточно коэффициентов в строке")
+			return 0, matrix{}, errors.New("недостаточно коэффициентов в строке")
 		}
 		
 		for j:=0;j<size+1;j++{
@@ -146,13 +148,13 @@ func (FileReader) Read() (float64, matrix, bool) {
 			value, err := strconv.ParseFloat(lineCoeff[j], 64)
 
 			if err != nil {
-				panic("Коэффициенты должны быть числами")
+				return 0, matrix{}, errors.New("коэффициенты должны быть числами")
 			}
 
 			coeff[i][j] = value
 		}
 	}
 
-	return eps, matrix{size: size, coeff: coeff}, false
+	return eps, matrix{size: size, coeff: coeff}, nil
 
 }
