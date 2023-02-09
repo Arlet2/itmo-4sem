@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	fmt.Print("Выберите формат ввода 1) консоль, 2) файл: ")
+	fmt.Print("Выберите формат ввода 1) консоль, 2) файл 3) lab1.txt: ")
 
 	var mode int
 
@@ -14,10 +14,12 @@ func main() {
 
 	var reader MatrixReader
 
-	if mode == 1{
+	if mode == 1 {
 		reader = ConsoleReader{}
-	} else if mode == 2{
+	} else if mode == 2 {
 		reader = FileReader{}
+	} else if mode == 3 {
+		reader = PreparedReader{Path: "lab1.txt"}
 	} else {
 		fmt.Println("Выбран некорректный режим. Завершение...")
 		return
@@ -25,12 +27,21 @@ func main() {
 
 	eps, matrix, err := reader.Read()
 
-	if err != nil{
-		fmt.Println("Ошибка: "+err.Error())
+	if err != nil {
+		fmt.Println("Ошибка: " + err.Error())
 		return
 	}
 
-	fmt.Println("Eps:", eps)
-	matrix.Print()
+	fmt.Println("\nВведенные данные:")
+	fmt.Println("Точность:", eps)
+	matrix.PrintAugmented()
+
+	if !matrix.TryToCreateDiagonalDominance() {
+		matrix.PrintAugmented()
+		fmt.Println("Эта матрица не обладает диагональным преобладанием. Применение метода невозможно")
+		return
+	}
+
+	matrix.UseGaussZeidel(eps, false)
 
 }
