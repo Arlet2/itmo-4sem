@@ -17,3 +17,9 @@ func (m matrix) Print() {
 		fmt.Println()
 	}
 }
+
+func (m *matrix) MulRow(rowIndex int, value float64) {
+	for index := range m.coeff[rowIndex] {
+		m.coeff[rowIndex][index] *= value
+	}
+}
