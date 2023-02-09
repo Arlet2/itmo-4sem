@@ -3,15 +3,26 @@ package internal
 import "fmt"
 
 type matrix struct {
-	size int
+	size  int
 	coeff [][]float64
+}
+
+func (m matrix) PrintAugmented() {
+	fmt.Printf("Augmented matrix %dx%d:\n", m.size, m.size)
+
+	for i := 0; i < m.size; i++ {
+		for j := 0; j < m.size+1; j++ {
+			fmt.Print(m.coeff[i][j], " ")
+		}
+		fmt.Println()
+	}
 }
 
 func (m matrix) Print() {
 	fmt.Printf("Matrix %dx%d:\n", m.size, m.size)
 
-	for i:=0;i<m.size;i++{
-		for j:=0;j<m.size+1;j++{
+	for i := 0; i < m.size; i++ {
+		for j := 0; j < m.size; j++ {
 			fmt.Print(m.coeff[i][j], " ")
 		}
 		fmt.Println()
