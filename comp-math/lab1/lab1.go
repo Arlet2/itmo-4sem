@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -65,12 +66,22 @@ func (_ ConsoleReader) read() (float64, matrix, bool) {
 	var size int
 
 	fmt.Print("Введите размер матрицы: ")
-	fmt.Scanln(&size) // проверка на что-то плохое
+	n, _ := fmt.Scanf("%d", &size)
+
+	if n != 1 {
+		fmt.Println("n - целое число")
+		return 0, matrix{}, true
+	}
 
 	var eps float64
 
 	fmt.Print("Введите точность: ")
-	fmt.Scanln(&eps) // проверка на что-то плохое
+	n, _ = fmt.Scanf("%f", &eps)
+
+	if n != 1 {
+		fmt.Println("Точность - число")
+		return 0, matrix{}, true
+	}
 
 	coeff := make([][]int, size)
 
@@ -78,7 +89,12 @@ func (_ ConsoleReader) read() (float64, matrix, bool) {
 	for i:=0;i<size;i++{
 		coeff[i] = make([]int, size+1)
 		for j:=0;j<size+1;j++{
-			fmt.Scan(&coeff[i][j]) // проверка на что-то плохое
+			n, _ = fmt.Scanf("%d", &coeff[i][j])
+
+			if n != 1 {
+				fmt.Println("Коэффициенты - целые числа")
+				return 0, matrix{}, true
+			}
 		}
 	}
 
@@ -101,8 +117,6 @@ func (_ FileReader) read() (float64, matrix, bool) {
 
 	reader := bufio.NewReader(file)
 
-	var size int
-
 	line, _, err := reader.ReadLine()
 
 	if err == io.EOF {
@@ -115,8 +129,46 @@ func (_ FileReader) read() (float64, matrix, bool) {
 		return 0, matrix{}, true
 	}
 
-	size = strings.to
+	size, err := strconv.Atoi(strings.Split(string(line), " ")[0])
 
-	return 0, matrix{}, true
+	if err != nil {
+		fmt.Println("Размер матрицы - целое число")
+		return 0, matrix{}, true
+	}
+
+	eps, err := strconv.ParseFloat(strings.Split(string(line), " ")[1], 64)
+
+	if err != nil {
+		fmt.Println("Точность - число")
+		return 0, matrix{}, true
+	}
+
+	coeff := make([][]int, size)
+
+	for i:=0;i<size;i++{
+		coeff[i] = make([]int, size+1)
+		line, _, err = reader.ReadLine()
+
+		if err != nil{
+			fmt.Println("Недостаточно строк")
+			return 0, matrix{}, true
+		}
+
+		if len(strings.Split(string(line), " ")) < size {
+			fmt.Println("Недостаточно коэффициентов в строке")
+			return 0, matrix{}, true
+		}
+		
+		for j:=0;j<size+1;j++{
+			n, _ = fmt.Scanf("%d", &coeff[i][j])
+
+			if n != 1 {
+				fmt.Println("Коэффициенты - целые числа")
+				return 0, matrix{}, true
+			}
+		}
+	}
+
+	return eps, matrix{size: size, coeff: coeff}, false
 
 }
