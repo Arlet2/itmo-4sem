@@ -16,6 +16,10 @@ type MatrixReader interface {
 
 type ConsoleReader struct {}
 type FileReader struct {}
+type PreparedReader struct {
+	FileReader
+	Path string
+}
 
 func (ConsoleReader) Read() (float64, matrix, error) {
 	var input string
@@ -82,12 +86,21 @@ func (ConsoleReader) Read() (float64, matrix, error) {
 	return eps, matrix{size: size, coeff: coeff}, nil
 }
 
-func (FileReader) Read() (float64, matrix, error) {
+func (reader FileReader) Read() (float64, matrix, error) {
 	var path string
 	fmt.Print("Введите название файла: ")
 
 	fmt.Scanln(&path)
 
+	return reader.ReadWithPath(path)
+
+}
+
+func (reader PreparedReader) Read() (float64, matrix, error) {
+	return reader.ReadWithPath(reader.Path)
+}
+
+func (FileReader) ReadWithPath (path string) (float64, matrix, error) {
 	file, err := os.OpenFile(path, os.O_RDONLY, os.ModeIrregular)
 
 	if err != nil{
@@ -156,5 +169,4 @@ func (FileReader) Read() (float64, matrix, error) {
 	}
 
 	return eps, matrix{size: size, coeff: coeff}, nil
-
 }
