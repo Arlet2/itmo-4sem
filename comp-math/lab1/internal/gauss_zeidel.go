@@ -77,11 +77,12 @@ func (m matrix) IsNormaCorrect() (bool) {
 	fmt.Println("Вычисление нормы для матрицы: ")
 	m.Print()
 	var sum float64
-	for i := 0; i < 0; i++ {
+	for i := 0; i < m.size; i++ {
 		sum = 0
-		for _, value := range m.coeff[i] {
-			sum += math.Abs(value)
+		for j := 0; j < m.size; j++ {
+			sum += math.Abs(m.coeff[i][j])
 		}
+		
 		if (sum >= 1) {
 			return false
 		}
@@ -134,8 +135,9 @@ func (m matrix) UseGaussZeidel(eps float64, withTrace bool) {
 	faults := make([]float64, m.size)
 
 	// задаём начальное приближение
+	fmt.Println("Начальное приближение")
 	for index := range specialMatrix.coeff {
-		d[index] = specialMatrix.coeff[index][specialMatrix.size-1]
+		fmt.Scan(&d[index])//specialMatrix.coeff[index][specialMatrix.size-1]
 	}
 
 	if (withTrace) {
