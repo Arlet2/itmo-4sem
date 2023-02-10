@@ -11,7 +11,7 @@ import (
 3. Добавляем максимальный индекс каждого элемента в коллекцию
 4. Проверяем: если индексы различны, то возможно перестроить матрицу так, чтобы она обладала диагональным преобладанием, иначе нет
 */
-func (m *matrix) TryToCreateDiagonalDominance() bool {
+func (m matrix) TryToCreateDiagonalDominance() bool {
 
 	var maxCoeff float64
 	var maxIndex int
@@ -73,6 +73,22 @@ func (m *matrix) TryToCreateDiagonalDominance() bool {
 	return true
 }
 
+func (m matrix) IsNormaCorrect() (bool) {
+	fmt.Println("Вычисление нормы для матрицы: ")
+	m.Print()
+	var sum float64
+	for i := 0; i < 0; i++ {
+		sum = 0
+		for _, value := range m.coeff[i] {
+			sum += math.Abs(value)
+		}
+		if (sum >= 1) {
+			return false
+		}
+	}
+	return true
+}
+
 func (m matrix) UseGaussZeidel(eps float64, withTrace bool) {
 
 	var specialMatrix matrix
@@ -83,6 +99,7 @@ func (m matrix) UseGaussZeidel(eps float64, withTrace bool) {
 
 		for j := 0; j < m.size; j++ {
 			if index == j {
+				m.coeff[index][j] = 0
 				continue
 			}
 			m.coeff[index][j] *= -1
@@ -102,8 +119,14 @@ func (m matrix) UseGaussZeidel(eps float64, withTrace bool) {
 	fmt.Println("\nМатрица вида x = Cx+d:")
 	specialMatrix.Print()
 
+	if m.IsNormaCorrect() {
+		fmt.Println("Норма матрицы < 1. Условия сходимости выполняются")
+	} else {
+		fmt.Println("Норма матрицы не выполняет условия сходимости")
+	}
+
 	counter := 0
-	diff := m.coeff[0][0]
+	diff := eps+1
 	var last float64
 	var shift int
 
@@ -113,6 +136,10 @@ func (m matrix) UseGaussZeidel(eps float64, withTrace bool) {
 	// задаём начальное приближение
 	for index := range specialMatrix.coeff {
 		d[index] = specialMatrix.coeff[index][specialMatrix.size-1]
+	}
+
+	if (withTrace) {
+		fmt.Println("Итерации:")
 	}
 
 	for diff >= eps {
