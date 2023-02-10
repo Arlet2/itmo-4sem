@@ -44,8 +44,9 @@ func main() {
 	matrix.PrintAugmented()
 
 	if !matrix.TryToCreateDiagonalDominance() {
-		fmt.Println("Эта матрица не обладает диагональным преобладанием.")
+		fmt.Println("Эта матрица не обладает диагональным преобладанием. Метод может не работать!!!")
 	}
+	matrix.PrintAugmented()
 
 	matrix.UseGaussZeidel(eps, tracing)
 
