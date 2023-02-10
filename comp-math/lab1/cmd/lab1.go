@@ -32,16 +32,21 @@ func main() {
 		return
 	}
 
+	var answer uint8
+	var tracing bool
+	fmt.Print("Включить отображение итераций? (y/n): ")
+	fmt.Scanf("%c", &answer)
+
+	tracing = answer == 'y'
+
 	fmt.Println("\nВведенные данные:")
 	fmt.Println("Точность:", eps)
 	matrix.PrintAugmented()
 
 	if !matrix.TryToCreateDiagonalDominance() {
-		matrix.PrintAugmented()
-		fmt.Println("Эта матрица не обладает диагональным преобладанием. Применение метода невозможно")
-		return
+		fmt.Println("Эта матрица не обладает диагональным преобладанием.")
 	}
 
-	matrix.UseGaussZeidel(eps, false)
+	matrix.UseGaussZeidel(eps, tracing)
 
 }
