@@ -165,6 +165,7 @@ func (m matrix) UseGaussZeidel(eps float64, withTrace bool) {
 
 				d[i] += specialMatrix.coeff[i][j] * d[j+shift]
 			}
+			//d[i] = float64(float32(d[i]))
 			faults[i] = math.Abs(d[i]-last)
 			diff = math.Max(diff, faults[i])
 
