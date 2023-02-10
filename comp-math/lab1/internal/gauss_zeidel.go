@@ -123,7 +123,7 @@ func (m matrix) UseGaussZeidel(eps float64, withTrace bool) {
 	if m.IsNormaCorrect() {
 		fmt.Println("Норма матрицы < 1. Условия сходимости выполняются")
 	} else {
-		fmt.Println("Норма матрицы не выполняет условия сходимости")
+		fmt.Println("Норма матрицы не выполняет условия сходимости. Метод может не работать!!!")
 	}
 
 	counter := 0
