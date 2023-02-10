@@ -48,6 +48,7 @@ func (ConsoleReader) Read() (float64, matrix, error) {
 	fmt.Print("Введите точность: ")
 	_, err = fmt.Scan(&input)
 	fmt.Scanf(" ") // сброс пробела....
+	input = strings.ReplaceAll(input, ",", ".")
 
 	if err != nil {
 		return 0, matrix{}, errors.New("нужно что-то ввести")
@@ -74,6 +75,8 @@ func (ConsoleReader) Read() (float64, matrix, error) {
 			if err != nil {
 				return 0, matrix{}, errors.New("недостаточно коэффициентов")
 			}
+			
+			input = strings.ReplaceAll(input, ",", ".")
 
 			coeff[i][j], err = strconv.ParseFloat(input, 64)
 
