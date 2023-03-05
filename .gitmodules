@@ -1,0 +1,3 @@
+[submodule "embed-systems/assignment-1-pe-file-reader"]
+	path = embed-systems/assignment-1-pe-file-reader
+	url = https://gitlab.se.ifmo.ru/Arlet/assignment-1-pe-file-reader.git
