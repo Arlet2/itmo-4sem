@@ -11,6 +11,7 @@ import (
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
+	//todo: добавить разделение на систему уравнений и одно уравнение
 	fmt.Println("Выберите функцию из предложенных:")
 	for index, function := range functions.Functions {
 		fmt.Printf("%d: f(x) = "+function.Text+"\n", index+1)
@@ -59,4 +60,35 @@ func main() {
 	}
 
 	fmt.Println("Вы выбрали "+ methods.Methods[input-1].Name)
+
+	// добавить ввод из файла
+
+	fmt.Print("Введите левую границу промежутка: ")
+
+	if !scanner.Scan() {
+		fmt.Println("Ожидался ввод...")
+		return
+	}
+
+	leftBorder, err := strconv.ParseFloat(scanner.Text(), 64)
+
+	if err != nil {
+		fmt.Println("Ожидалось целое число...")
+		return
+	}
+
+	fmt.Print("Введите правую границу промежутка: ")
+
+	if !scanner.Scan() {
+		fmt.Println("Ожидался ввод...")
+		return
+	}
+
+	rightBorder, err := strconv.ParseFloat(scanner.Text(), 64)
+
+	if err != nil {
+		fmt.Println("Ожидалось целое число...")
+		return
+	}
+
 }
