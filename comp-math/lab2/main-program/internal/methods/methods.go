@@ -1,6 +1,8 @@
 package methods
 
-import "lab2/internal/functions"
+import (
+	"lab2/internal/functions"
+)
 
 var Methods = []MethodInfo{
 	{
@@ -27,11 +29,21 @@ type MethodInfo struct {
 }
 
 func HasIntervalRoot(function functions.Function, a float64, b float64) bool {
-	return HasIntervalRoots(function, a, b) && function.Derivative(float64(a))*function.Derivative(float64(b)) > 0
+	return HasIntervalRoots(function, a, b) && isMonotone(function, a, b)
 }
 
 func HasIntervalRoots(function functions.Function, a float64, b float64) bool {
-	return a*b < 0
+	return function.Formula(a)*function.Formula(b) < 0
+}
+
+func isMonotone(function functions.Function, a float64, b float64) bool {
+	for i := a; i <= b; i+= (b-a)/100 {
+		if function.Derivative(a)*function.Derivative(i) < 0 {
+			return false
+		}
+	}
+
+	return true
 }
 
 func GetFirstApprox(function functions.Function, a float64, b float64) (float64) {
