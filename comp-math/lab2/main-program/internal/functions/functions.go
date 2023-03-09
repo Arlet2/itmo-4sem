@@ -22,10 +22,10 @@ var Functions = []Function{
 		Derivative2: func(x float64) float64 { return 0 },
 	},
 	{
-		Text:        "ln x + 20",
-		Formula:     func(x float64) float64 { return math.Log(x) + 20 },
-		Derivative:  func(x float64) float64 { return 1 / x },
-		Derivative2: func(x float64) float64 { return -1 / math.Pow(x, 2) },
+		Text:        "100*ln x + 20",
+		Formula:     func(x float64) float64 { return 100*math.Log(x) + 20 },
+		Derivative:  func(x float64) float64 { return 100 / x },
+		Derivative2: func(x float64) float64 { return -100 / math.Pow(x, 2) },
 	},
 	{
 		Text:        "sin 2x",
@@ -53,7 +53,7 @@ func HasIntervalRoot(function Function, a float64, b float64) bool {
 }
 
 func HasIntervalRoots(function Function, a float64, b float64) bool {
-	return function.Formula(a)*function.Formula(b) < 0
+	return function.Formula(a)*function.Formula(b) <= 0
 }
 
 func isMonotone(function Function, a float64, b float64) bool {
