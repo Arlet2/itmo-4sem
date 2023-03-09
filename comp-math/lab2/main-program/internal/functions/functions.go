@@ -7,7 +7,7 @@ var Functions = []Function{
 		Text:        "2022x^2 - 2023x + 1",
 		Formula:     func(x float64) float64 { return 2022*math.Pow(x, 2) - 2023*x + 1 },
 		Derivative:  func(x float64) float64 { return 4044*x - 2023 },
-		Derivative2: func(x float64) float64 { return 8088 },
+		Derivative2: func(x float64) float64 { return 4044 },
 	},
 	{
 		Text:        "pi - x",
