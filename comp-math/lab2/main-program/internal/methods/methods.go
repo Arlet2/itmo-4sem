@@ -34,7 +34,7 @@ func HasIntervalRoots(function functions.Function, a float64, b float64) bool {
 	return a*b < 0
 }
 
-func GetFisrtApprox(function functions.Function, a float64, b float64) (float64) {
+func GetFirstApprox(function functions.Function, a float64, b float64) (float64) {
 	if function.Formula(a)*function.Derivative2(a) > 0 {
 		return a
 	} else {
