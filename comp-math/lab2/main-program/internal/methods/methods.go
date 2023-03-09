@@ -25,7 +25,7 @@ var Methods = []MethodInfo{
 type MethodInfo struct {
 	Id     int
 	Name   string
-	Action func(functions.Function) (root float64, err error)
+	Action func(functions.Function, float64, float64) (root float64, err error)
 }
 
 func HasIntervalRoot(function functions.Function, a float64, b float64) bool {
