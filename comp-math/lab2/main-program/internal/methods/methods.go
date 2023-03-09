@@ -43,5 +43,10 @@ func GetFirstApprox(function functions.Function, a float64, b float64) (float64)
 }
 
 func GetSecondApprox(firstApprox float64, a float64, b float64) (float64) {
-	return firstApprox+(b-a)/10
+	if firstApprox == a {
+		return firstApprox+(b-a)/10
+	} else {
+		return firstApprox-(b-a)/10
+	}
+	
 }
