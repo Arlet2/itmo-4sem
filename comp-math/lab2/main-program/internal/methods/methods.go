@@ -33,3 +33,15 @@ func HasIntervalRoot(function functions.Function, a int, b int) bool {
 func HasIntervalRoots(function functions.Function, a int, b int) bool {
 	return a*b < 0
 }
+
+func GetFisrtApprox(function functions.Function, a float64, b float64) (float64) {
+	if function.Formula(a)*function.Derivative2(a) > 0 {
+		return a
+	} else {
+		return b
+	}
+}
+
+func GetSecondApprox(firstApprox float64, a float64, b float64) (float64) {
+	return firstApprox+(b-a)/10
+}
