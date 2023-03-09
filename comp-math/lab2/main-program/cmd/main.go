@@ -59,36 +59,8 @@ func main() {
 		return
 	}
 
-	fmt.Println("Вы выбрали "+ methods.Methods[input-1].Name)
+	fmt.Println("Вы выбрали " + methods.Methods[input-1].Name)
 
 	// добавить ввод из файла
-
-	fmt.Print("Введите левую границу промежутка: ")
-
-	if !scanner.Scan() {
-		fmt.Println("Ожидался ввод...")
-		return
-	}
-
-	leftBorder, err := strconv.ParseFloat(scanner.Text(), 64)
-
-	if err != nil {
-		fmt.Println("Ожидалось целое число...")
-		return
-	}
-
-	fmt.Print("Введите правую границу промежутка: ")
-
-	if !scanner.Scan() {
-		fmt.Println("Ожидался ввод...")
-		return
-	}
-
-	rightBorder, err := strconv.ParseFloat(scanner.Text(), 64)
-
-	if err != nil {
-		fmt.Println("Ожидалось целое число...")
-		return
-	}
 
 }
