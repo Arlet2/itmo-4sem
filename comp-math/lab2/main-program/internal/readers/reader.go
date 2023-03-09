@@ -115,11 +115,12 @@ func ReadByFile(path string, function functions.Function, method methods.MethodI
 	file, err := os.OpenFile(path, os.O_RDONLY, os.ModeDevice)
 
 	if err != nil {
-		err = errors.Join(err, errors.New("не удалось открыть файл"))
+		err = errors.Join(errors.New("не удалось открыть файл"), err)
 		return
 	}
 
 	scanner := bufio.NewScanner(file)
+	scanner.Split(bufio.ScanWords)
 
 	if !scanner.Scan() {
 		err = errors.New("ожидался ввод в первой строке")
