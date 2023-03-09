@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"lab2/internal/functions"
 	"lab2/internal/methods"
 	"os"
 	"strconv"
@@ -16,7 +17,7 @@ type ReadInfo struct {
 	Approx      []float64 // может быть nil!
 }
 
-func ReadByConsole(method methods.MethodInfo) (readInfo ReadInfo, err error) {
+func ReadByConsole(function functions.Function, method methods.MethodInfo) (readInfo ReadInfo, err error) {
 
 	scanner := bufio.NewScanner(os.Stdin)
 
@@ -48,6 +49,10 @@ func ReadByConsole(method methods.MethodInfo) (readInfo ReadInfo, err error) {
 		return
 	}
 
+	if readInfo.LeftBorder > readInfo.RightBorder {
+		readInfo.LeftBorder, readInfo.RightBorder = readInfo.RightBorder, readInfo.LeftBorder
+	}
+
 	fmt.Print("Введите погрешность вычислений: ")
 
 	if !scanner.Scan() {
@@ -64,34 +69,41 @@ func ReadByConsole(method methods.MethodInfo) (readInfo ReadInfo, err error) {
 
 	switch method.Id {
 	case 1:
-		// todo: добавить значения по умолчанию
+		readInfo.Approx = make([]float64, 2)
 		fmt.Print("Введите начальное приближение: ")
 
-		if !scanner.Scan() {
-			err = errors.New("ожидался ввод")
-			return
+		var isInputed bool
+
+		if scanner.Scan() {
+			readInfo.Approx[0], err = strconv.ParseFloat(scanner.Text(), 64)
+
+			if err == nil {
+				isInputed = true
+			}
 		}
 
-		readInfo.Approx[0], err = strconv.ParseFloat(scanner.Text(), 64)
-
-		if err != nil {
-			err = errors.New("ожидалось число")
-			return
+		if !isInputed {
+			fmt.Println("Было использовано значение по умолчанию")
+			readInfo.Approx[0] = methods.GetFirstApprox(function, readInfo.LeftBorder, readInfo.RightBorder)
 		}
 
+		isInputed = false
 		fmt.Print("Введите второе начальное приближение: ")
 
-		if !scanner.Scan() {
-			err = errors.New("ожидался ввод")
-			return
+		if scanner.Scan() {
+			readInfo.Approx[1], err = strconv.ParseFloat(scanner.Text(), 64)
+
+			if err == nil {
+				isInputed = true
+			}
 		}
 
-		readInfo.Approx[1], err = strconv.ParseFloat(scanner.Text(), 64)
-
-		if err != nil {
-			err = errors.New("ожидалось число")
-			return
+		if !isInputed {
+			fmt.Println("Было использовано значение по умолчанию")
+			readInfo.Approx[1] = methods.GetSecondApprox(readInfo.Approx[0], readInfo.LeftBorder, readInfo.RightBorder)
 		}
+
+		err = nil
 		
 	}
 
