@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"lab2/internal/functions"
-	"lab2/internal/methods"
 	"os"
 	"strconv"
 )
@@ -17,7 +16,7 @@ type ReadInfo struct {
 	Approx      []float64 // может быть nil!
 }
 
-func ReadByConsole(function functions.Function, method methods.MethodInfo) (readInfo ReadInfo, err error) {
+func ReadByConsole(function functions.Function, methodId int) (readInfo ReadInfo, err error) {
 
 	scanner := bufio.NewScanner(os.Stdin)
 
@@ -67,7 +66,7 @@ func ReadByConsole(function functions.Function, method methods.MethodInfo) (read
 		return
 	}
 
-	switch method.Id {
+	switch methodId {
 	case 1:
 		readInfo.Approx = make([]float64, 2)
 		fmt.Print("Введите начальное приближение: ")
@@ -84,7 +83,7 @@ func ReadByConsole(function functions.Function, method methods.MethodInfo) (read
 
 		if !isInputed {
 			fmt.Println("Было использовано значение по умолчанию")
-			readInfo.Approx[0] = methods.GetFirstApprox(function, readInfo.LeftBorder, readInfo.RightBorder)
+			readInfo.Approx[0] = functions.GetFirstApprox(function, readInfo.LeftBorder, readInfo.RightBorder)
 		}
 
 		isInputed = false
@@ -100,7 +99,7 @@ func ReadByConsole(function functions.Function, method methods.MethodInfo) (read
 
 		if !isInputed {
 			fmt.Println("Было использовано значение по умолчанию")
-			readInfo.Approx[1] = methods.GetSecondApprox(readInfo.Approx[0], readInfo.LeftBorder, readInfo.RightBorder)
+			readInfo.Approx[1] = functions.GetSecondApprox(readInfo.Approx[0], readInfo.LeftBorder, readInfo.RightBorder)
 		}
 
 		err = nil
@@ -110,7 +109,7 @@ func ReadByConsole(function functions.Function, method methods.MethodInfo) (read
 	return
 }
 
-func ReadByFile(path string, function functions.Function, method methods.MethodInfo) (readInfo ReadInfo, err error) {
+func ReadByFile(path string, function functions.Function, methodId int) (readInfo ReadInfo, err error) {
 
 	file, err := os.OpenFile(path, os.O_RDONLY, os.ModeDevice)
 
@@ -162,7 +161,7 @@ func ReadByFile(path string, function functions.Function, method methods.MethodI
 		return
 	}
 
-	switch method.Id {
+	switch methodId {
 	case 1:
 		readInfo.Approx = make([]float64, 2)
 
@@ -178,7 +177,7 @@ func ReadByFile(path string, function functions.Function, method methods.MethodI
 
 		if !isInputed {
 			fmt.Println("Было использовано значение по умолчанию для первого приближения")
-			readInfo.Approx[0] = methods.GetFirstApprox(function, readInfo.LeftBorder, readInfo.RightBorder)
+			readInfo.Approx[0] = functions.GetFirstApprox(function, readInfo.LeftBorder, readInfo.RightBorder)
 		}
 
 		isInputed = false
@@ -193,7 +192,7 @@ func ReadByFile(path string, function functions.Function, method methods.MethodI
 
 		if !isInputed {
 			fmt.Println("Было использовано значение по умолчанию для второго приближения")
-			readInfo.Approx[1] = methods.GetSecondApprox(readInfo.Approx[0], readInfo.LeftBorder, readInfo.RightBorder)
+			readInfo.Approx[1] = functions.GetSecondApprox(readInfo.Approx[0], readInfo.LeftBorder, readInfo.RightBorder)
 		}
 
 		err = nil

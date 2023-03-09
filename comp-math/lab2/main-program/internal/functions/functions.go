@@ -47,3 +47,38 @@ type Function struct {
 	Derivative  func(float64) float64
 	Derivative2 func(float64) float64
 }
+
+func HasIntervalRoot(function Function, a float64, b float64) bool {
+	return HasIntervalRoots(function, a, b) && isMonotone(function, a, b)
+}
+
+func HasIntervalRoots(function Function, a float64, b float64) bool {
+	return function.Formula(a)*function.Formula(b) < 0
+}
+
+func isMonotone(function Function, a float64, b float64) bool {
+	for i := a; i <= b; i += (b - a) / 100 {
+		if function.Derivative(a)*function.Derivative(i) < 0 {
+			return false
+		}
+	}
+
+	return true
+}
+
+func GetFirstApprox(function Function, a float64, b float64) float64 {
+	if function.Formula(a)*function.Derivative2(a) > 0 {
+		return a
+	} else {
+		return b
+	}
+}
+
+func GetSecondApprox(firstApprox float64, a float64, b float64) float64 {
+	if firstApprox == a {
+		return firstApprox + (b-a)/10
+	} else {
+		return firstApprox - (b-a)/10
+	}
+
+}
